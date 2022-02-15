@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Email Stripo Plugin App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./css/main.css" rel="stylesheet"></link>
+    <link rel="stylesheet" href="external_preview_popup.css"></link>    
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>  
+</head>
+<body>
+    <div id="overlay">
+        <img src="./img/loader.gif" alt="Loading" style="position: fixed;left: 50%; top: 35%;" height="50" width="50" />
+        Loading...
+   </div>
+    <div class="cls-externalSystemContainer">
+        <!-- <div class="cls-logo-img-section">
+            <a class="cls-logo-link" href="javascript:;">
+                <img class="cls-logo-img" src="./img/imglogo.PNG" alt="logo">
+            </a>
+        </div> -->
+        <div class="cls-header-left-side-controls">
+            <button id="back" class="cls-left-icon cls-icon-customize-btn cls-custom-padding-back-icon btn tooltip" onclick="window.close();">
+                <span class="tooltiptext">Leave</span>
+                <img src="./img/svg-icons/back-svg.svg" alt="back">
+            </button>
+            <button class="cls-undo-change-btn btn tooltip">
+                <span class="tooltiptext">Undo</span>
+                <img src="./img/svg-icons/undo-svg.svg" alt="undo" >
+            </button>
+            <button class="cls-redo-change-btn btn tooltip">
+                <span class="tooltiptext">Redo</span>
+                <img  src="./img/svg-icons/redo-svg.svg" alt="redo">
+            </button>
+        </div>    
+        <div class="cls-template-name-input-section">
+            <!-- <input type="text" class="cls-template-input-field" id="teamplatename" name="teloaderamplatename" readonly> -->
+            <span class="cls-template-title" id="templatename"></span>
+        </div>                   
+        <div class="cls-header-right-side-controls">
+            <button id="codeEditor" class="cls-icon-customize-btn btn tooltip cls-icon-margin-padding-customize">
+                <span class="tooltiptext">Code Editor</span>
+                <img  src="./img/svg-icons/code-svg.svg" alt="codeeditor">
+            </button>            
+            <button id="previewButton" class="cls-icon-customize-btn btn tooltip cls-icon-margin-padding-customize">
+                <span class="tooltiptext">Preview</span>
+                <div id="btn-loader" class="loader"></div>
+                <img id="preview-icon" src="./img/svg-icons/phone-svg.svg" alt="preview">
+            </button>            
+            <button id="btnemailsend" class="cls-icon-customize-btn btn tooltip cls-icon-margin-padding-customize">
+                <span class="tooltiptext">Send Email</span>
+                <img  src="./img/svg-icons/mail-svg.svg" alt="send email">
+            </button>
+        </div> 
+        <div>
+            <button class="cls-save-btn btn tooltip" id="saveButton">
+                <span class="tooltiptext">Save</span>Save
+            </button>
+        </div>                  
+    </div>
+ <!-- header section ends -->
+<div class="row">
+    <div>
+        <div id="stripoSettingsContainer">Loading...</div>
+        <div id="stripoPreviewContainer"></div>
+        <div id="loaderonrequest"></div>
+    </div>
+</div>
+</body>
+
+<script type="module">
+    import { EMAILConfiguration } from './js/configuration.js';
+    import { userContextConfiguration } from './js/usercontext.js';
+    import { usercontext } from './js/usercontext.js';
+    import { EMAILInitialization } from './index.js';
+    //  Below commented code is for dev testing purpose
+    // var message = {
+    //     "TemplateName": "Confirmation_en-US_Base",
+    //     "apiKey": "blt9c861b1a4b69e623",
+    //     "authToken": "csd90f9986822509791c593ee3",
+    //     "contentTypeId": "custom_block_design",
+    //     "customblock": {'contenttypeuuid': 'custom_block_design'},
+    //     "entryId": "bltae9d3afaa16252fd",
+    //     "environment": "dev_preview_environment",
+    //     "includefallback": "false",
+    //     "locale": "en-us",
+    //     "pluginId": "f7daf1549bed437488ed8c1fe92f3e20",
+    //     "secretKey": "6192a5b950614b5eb8ae05f20f395dec",
+    //     "version": "34"
+    // }
+    /**
+     * This method loads the stripo configuration first and then load the template.
+     * @return stripo configuration from config.json.
+    */
+    window.addEventListener("message", (event) => {
+       // console.log("Event data - " , event.data);
+        userContextConfiguration.loadUserContext(event.data).then(res => {
+            EMAILConfiguration.loadStripoConfiguration().then(respose => {                
+                EMAILInitialization.loadTemplate(EMAILInitialization.initPlugin);
+            }).catch(err => {
+                console.log(err);
+            })
+        }).catch(err => { console.log(err) })
+   }, false);
+
+</script>
+
+</html>
